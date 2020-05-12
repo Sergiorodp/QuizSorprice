@@ -18,6 +18,10 @@ cont1 = 0
 cont2 = 0
 cont3 = 0
 
+contled1 = 0
+contled2 = 0
+contled3 = 0
+
 sizex_circ = 40
 sizey_circ = 40
 
@@ -73,65 +77,81 @@ def update_label():
     global a_0,a_1,a_2
     global alerta
     global pin_led6, pin_led5, pin_led4
+    global contled3,contled2,contled1
 
     cont = a_0.read()
     cont1 = a_0.read()
 
     cont_indicador.config(text = str(cont1))
-
     ref = db.reference("sensores")
-    ref.update({
-        'adc1': cont
-    }) 
 
     if(cont1 > 0.5):
         draw.itemconfig(led1_draw, fill = 'yellow')
         pin_led4.write(1)
+        contled1 +=1
     else:
         draw.itemconfig(led1_draw, fill = 'white')
         pin_led4.write(0)
 
+    ref.update({
+        'adc1': {
+            'valor' : cont1,
+            'prendido' : contled1
+        }
+    }) 
 
     cont = a_1.read()
     cont2 = a_1.read()
     cont_indicador1.config(text = str(cont2))
-
-    cont = a_1.read()
-    ref.update({
-        'adc2': cont
-    })
+ 
 
     if(cont2 > 0.5):
-        draw.itemconfig(led2_draw, fill = 'yellow')
+        draw.itemconfig(led2_draw, fill = 'blue')
         pin_led5.write(1)
+        contled2 +=1
     else:
         draw.itemconfig(led2_draw, fill = 'white')
-        ppin_led5.write(0)
+        pin_led5.write(0)
+
+    ref.update({
+        'adc2': {
+            'valor' : cont2,
+            'prendido' : contled2,
+        }
+    })
 
     cont = a_2.read()
     cont3 = a_2.read()
     cont_indicador2.config(text = str(cont3))
 
-    ref.update({
-        'adc3' : cont
-    })
-
     if(cont3 > 0.5):
-        draw.itemconfig(led3_draw, fill = 'yellow')
+        draw.itemconfig(led3_draw, fill = 'green')
         pin_led6.write(1)
+        contled3 +=1
     else:
         draw.itemconfig(led3_draw, fill = 'white')
         pin_led6.write(0)
 
-    ventana.after(5000,update_label)
+    ref.update({
+        'adc3' : {
+            'valor':cont3,
+            'prendido': contled3,
+        }
+    })
+
+    ventana.after(500,update_label)
 
     if(cont1 > 0.5 or cont2 > 0.5 or cont3 > 0.5):
+        alerta.place(x=600, y = 400);
         alerta.config(text = "Alerta")
         ref.update({
             'Alerta' : "Alerta"
         })
     else:
         alerta.place_forget()
+        ref.update({
+            'Alerta' : ""
+        })
 
 
 
