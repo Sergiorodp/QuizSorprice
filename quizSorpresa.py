@@ -22,6 +22,10 @@ contled1 = 0
 contled2 = 0
 contled3 = 0
 
+pr1 = False
+pr2 = False
+pr3 = False
+
 sizex_circ = 40
 sizey_circ = 40
 
@@ -78,6 +82,7 @@ def update_label():
     global alerta
     global pin_led6, pin_led5, pin_led4
     global contled3,contled2,contled1
+    global pr1,pr2,pr3
 
     cont = a_0.read()
     cont1 = a_0.read()
@@ -89,14 +94,17 @@ def update_label():
         draw.itemconfig(led1_draw, fill = 'yellow')
         pin_led4.write(1)
         contled1 +=1
+        pr1 = True
     else:
         draw.itemconfig(led1_draw, fill = 'white')
         pin_led4.write(0)
+        pr1 = False
 
     ref.update({
         'adc1': {
             'valor' : cont1,
-            'prendido' : contled1
+            'N-prendido' : contled1,
+            'Predido-ahora' : pr1
         }
     }) 
 
@@ -109,14 +117,17 @@ def update_label():
         draw.itemconfig(led2_draw, fill = 'blue')
         pin_led5.write(1)
         contled2 +=1
+        pr2 = True
     else:
         draw.itemconfig(led2_draw, fill = 'white')
         pin_led5.write(0)
+        pr2 = False
 
     ref.update({
         'adc2': {
             'valor' : cont2,
-            'prendido' : contled2,
+            'N-prendido' : contled2,
+            'prendido-ahora':pr2,
         }
     })
 
@@ -128,14 +139,17 @@ def update_label():
         draw.itemconfig(led3_draw, fill = 'green')
         pin_led6.write(1)
         contled3 +=1
+        pr3 = True
     else:
         draw.itemconfig(led3_draw, fill = 'white')
         pin_led6.write(0)
+        pr3 = False
 
     ref.update({
         'adc3' : {
             'valor':cont3,
-            'prendido': contled3,
+            'N-prendido': contled3,
+            'prendido-Ahora': pr3,
         }
     })
 
